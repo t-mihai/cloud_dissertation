@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.opencv.imgcodecs.Imgcodecs.imdecode;
-import static org.opencv.imgcodecs.Imgcodecs.imwrite;
 
 @Log
 @Service
