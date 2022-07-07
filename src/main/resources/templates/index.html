@@ -33,6 +33,7 @@
 				</canvas>
 				<div class="output">
 					<img id="photo" name="photo" alt="The screen capture will appear in this box.">
+					<p class="text-danger warning_photo" th:if="${warning_photo}" th:text="${warning_photo}"></p>
 				</div>
 
 				<p class="text-danger" th:if="${warning}" th:text="${warning_credentials}"></p>

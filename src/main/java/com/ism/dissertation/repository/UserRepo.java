@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
@@ -17,6 +16,9 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     @Query("select id from User where username = :username")
     Integer findIdUserByUsername(@Param("username") String username);
+
+    @Query("select username from User where id = :id")
+    String findUsernameById(@Param("id") Integer id);
 
     @Query("select id from User order by id desc")
     List<Integer> findLastId();

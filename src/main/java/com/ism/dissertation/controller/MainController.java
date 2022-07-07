@@ -65,7 +65,18 @@ public class MainController {
         submitted = false;
 
         if(!photo.equals("")){
-            faceRecognitionService.faceRecognition(photo);
+            Integer integer = faceRecognitionService.faceRecognition(photo);
+            if(integer == null){
+                ra.addFlashAttribute("warning_photo",
+                        "Face not recognized! Please take another photo or register!");
+                return "redirect:/";
+            } else {
+                String username = userRepository.findUsernameById(integer);
+                result.setUsername(username);
+                QuestionForm qForm = qService.getQuestions();
+                m.addAttribute("qForm", qForm);
+                return "quiz.html";
+            }
         }
 
         User user = userRepository.findByCredentials(email).get(0);

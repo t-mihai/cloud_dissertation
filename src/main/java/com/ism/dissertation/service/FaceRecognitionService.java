@@ -79,26 +79,30 @@ public class FaceRecognitionService {
         return new Mat(image, cropface);
     }
 
-    public boolean faceRecognition(String photo) {
+    public Integer faceRecognition(String photo) {
         List<User> userList = userRepository.findAll();
-        ArrayList<Mat> photosMat = new ArrayList<>();
-        ArrayList<Integer> listOfIds = new ArrayList<>();
-        userList.forEach(user -> {
+        for (User user : userList) {
+            ArrayList<Mat> photosMat = new ArrayList<>();
+            ArrayList<Integer> listOfIds = new ArrayList<>();
             Blob picture = user.getPicture();
             photosMat.add(detectFace(convertBlobToString(picture)));
             listOfIds.add(user.getId());
-        });
 
-        MatOfInt labels = new MatOfInt();
-        labels.fromList(new ArrayList<>(listOfIds));
-        LBPHFaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
-        faceRecognizer.train(photosMat, labels);
+            LBPHFaceRecognizer faceRecognizer = LBPHFaceRecognizer.create();
 
-        int[] outLabel = new int[1];
-        double[] outConf = new double[1];
-        faceRecognizer.predict(detectFace(photo), outLabel, outConf);
+            MatOfInt labels = new MatOfInt();
+            labels.fromList(new ArrayList<>(listOfIds));
+            faceRecognizer.train(photosMat, labels);
 
-        return (outConf[0] <= 60);
+            int[] outLabel = new int[1];
+            double[] outConf = new double[1];
+            faceRecognizer.predict(detectFace(photo), outLabel, outConf);
+
+            if((outConf[0] <= 60)){
+                return user.getId();
+            }
+        }
+        return null;
     }
 
 //    public Mat base642Mat(String base64) {
