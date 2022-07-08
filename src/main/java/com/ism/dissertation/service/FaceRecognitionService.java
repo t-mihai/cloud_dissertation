@@ -32,8 +32,6 @@ public class FaceRecognitionService {
     UserRepo userRepository;
 
     public FaceRecognitionService() {
-//        System.out.printf("AICI -> java.library.path: %s%n", System.getProperty("java.library.path"));
-        nu.pattern.OpenCV.loadShared();
         Loader.load(opencv_java.class);
         cascadeClassifier = new CascadeClassifier();
         cascadeClassifier.load("./src/main/resources/files/haarcascade_frontalface_alt.xml");
@@ -98,7 +96,7 @@ public class FaceRecognitionService {
             double[] outConf = new double[1];
             faceRecognizer.predict(detectFace(photo), outLabel, outConf);
 
-            if((outConf[0] <= 60)){
+            if ((outConf[0] <= 60)) {
                 return user.getId();
             }
         }

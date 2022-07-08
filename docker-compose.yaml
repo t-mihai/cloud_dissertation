@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  mysqldb:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'dissertation_db'
+      MYSQL_PASSWORD: 'root1234'
+      MYSQL_ROOT_PASSWORD: 'root1234'
+    ports:
+      - 3360:3360
+    networks:
+      - cloud_biometrics_net
+    expose:
+      - 3360
+    volumes:
+      - mysqldb:/var/lib/mysql
+
+  cloud_biometrics:
+    image: ase.ism/cloud-biometrics:latest
+    ports:
+      - 8084:8084
+    networks:
+      - cloud_biometrics_net
+    volumes:
+      - ./res/application.yaml:/application.yaml
+      - ./res/opencv.jar:/usr/local/lib/opencv-4.0.1-1.4.4-linux-x86_64.jar
+    depends_on:
+      - mysqldb
+
+networks:
+  cloud_biometrics_net:
+
+volumes:
+  mysqldb:
